@@ -16,15 +16,16 @@ class CreateCarsTable extends Migration
         Schema::create('cars', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('licence_plate');
-            $table->string('brand');
-            $table->string('model');    
-            $table->string('category');
-            $table->string('seats');
-            $table->boolean('gps');
-            $table->integer('horsepower');
-            $table->integer('top_speed');
-            $table->integer('hourlyPrice');
+            $table->string('brand')->nullable();
+            $table->string('model')->nullable();
+            $table->string('category')->nullable();
+            $table->string('seats')->nullable();
+            $table->boolean('gps')->nullable();
+            $table->integer('horsepower')->nullable();
+            $table->integer('top_speed')->nullable();
+            $table->integer('hourlyPrice')->nullable();
+            $table->integer('amount')->nullable();
+            $table->string('licence_plate')->nullable();
         });
     }
 

@@ -61,8 +61,6 @@ body {
                         <td>{{$reservation->car->gps}}</td>
                         <td>{{$reservation->car->brand}} | {{$reservation->car->model}}</td>
                         <td>
-
-
                             <button class="btn btn-warning disabled">Pending
                                 <i class="fa-regular fa-hourglass"></i>                          
                               </button>

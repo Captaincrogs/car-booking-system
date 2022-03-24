@@ -19,7 +19,12 @@
     </div>
 </nav>
 </header>
-
+@if(session()->has('success'))
+    <div class="alert alert-success">
+        <li>{{ session()->get('success')}}</li>
+        
+    </div>
+@endif
 <div class="container mt-5 mb-5">
     <div class="row g-1">
         @foreach($cars as $car)
@@ -41,8 +46,11 @@
                     </div>
                 </div>
                 <div class="p-details">
+                    <form action="cars/checkout" method="post">
+                        @csrf
                     <div class="d-flex justify-content-between align-items-center mx-2">
-                        <h5>{{$car->brand}}~ {{$car->model}}</h5><span>€{{$car->hourlyPrice}} p/h</span>
+                        <h5 input="name">{{$car->brand}}~ {{$car->model}}</h5>
+                        <span>€{{$car->hourlyPrice}} p/h</span>
                     </div>
                     <div class="mx-2">
                         <hr class="line">
@@ -58,14 +66,11 @@
                             <h6 class="mb-0">Seats</h6><span>{{$car->seats}}</span>
                         </div>
                     </div>
-                    <input type="hidden" name="carId" value="{{$car->id}}">
+                    <input type="hidden" name="id" value="{{$car->id}}">
                     <div class="buy mt-3">
-                        <button class="btn btn-primary btn-block" type="submit" ><a href="{{url('newreservation/'.$car->id)}}"></a>book now</button>
-
-
-
-                        
+                        <button type="submit" class="btn w-100 rounded my-2 btn btn-primary btn-block ">Add car to booking list</button> 
                     </div>
+                    </form>
                 </div>
             </div>
         </div>

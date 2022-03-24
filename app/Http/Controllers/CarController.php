@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreCarRequest;
 use App\Http\Requests\UpdateCarRequest;
 use Illuminate\Support\Facades\Session;
@@ -16,10 +16,7 @@ class CarController extends Controller
      */
     public function index()
     {
-
-
             $cars = Car::all();
-    
             return view('cars', compact('cars'));
     }
 
@@ -33,21 +30,20 @@ class CarController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreCarRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreCarRequest $request)
-    {           
-            $car = new Car();
-            //make a session to store chosen car id
-            Session::put('car_id', $car->id);
-            //redirect to the reservation page
-            return redirect()->route('reservations');
-            
-
+    public function checkout(request $request)
+    {
+        if(!Session::has('list')){
+            session()->put('list', []);
+        }
+        
+        $car_id = request()->id;
+        $car_id = $request->id;
+        $list = session()->get('list');
+        array_push($list, $car_id);
+        session()->put('list', $list);
+        Session::save();
+        // dd(session()->get('list'));
+        return redirect()->route('newReservation')->with('success', 'Car added successfully');
     }
 
     /**
