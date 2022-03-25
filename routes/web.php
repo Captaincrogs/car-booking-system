@@ -22,12 +22,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/reservations', [App\Http\Controllers\ReservationController::class, 'index'])->name('reservations');
-Route::get('/newReservation', [App\Http\Controllers\ReservationController::class, 'create'])->name('newReservation');
-
-Route::post('/cars/checkout', [App\Http\Controllers\CarController::class, 'checkout']);
-
-Route::get('/cars', [App\Http\Controllers\CarController::class, 'index'])->name('cars');
-// Route::get('/cars/{id}', [App\Http\Controllers\CarController::class, 'store'])->name('cars.store');
-Route::get('/invoices', [App\Http\Controllers\InvoiceController::class, 'index'])->name('invoices');
+//all routes need authentication to 
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/newReservation', 'ReservationController@newReservation')->name('newReservation');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/reservations', [App\Http\Controllers\ReservationController::class, 'index'])->name('reservations');
+    Route::get('/newReservation', [App\Http\Controllers\ReservationController::class, 'create'])->name('newReservation');
+    Route::post('/cars/checkout', [App\Http\Controllers\CarController::class, 'checkout']);
+    Route::get('/cars', [App\Http\Controllers\CarController::class, 'index'])->name('cars');
+    // Route::get('/cars/{id}', [App\Http\Controllers\CarController::class, 'store'])->name('cars.store');
+    Route::get('/invoices', [App\Http\Controllers\InvoiceController::class, 'index'])->name('invoices');
+});

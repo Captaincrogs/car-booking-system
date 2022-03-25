@@ -120,9 +120,23 @@ class ReservationController extends Controller
     {
         $reservation = reservation::all();
         $cars = Car::all();
+
+        $session_cars = Car::find(Session::get('list'));
+        //count the total price of the car
+        $total_price = 0;
+        foreach ($session_cars as $car) {
+            $total_price += $car->hourlyPrice;
+        }
+        // dd($total_price);
+
         
-        return view('newReservation', compact('reservation' , 'cars'));
-    }
+   
+           
+        
+        
+        
+        return view('newReservation', compact('reservation' , 'cars', 'session_cars', 'total_price'));
+        }
 
 
     /**

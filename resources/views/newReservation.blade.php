@@ -18,7 +18,7 @@
                     <div class="header-content-inner">
                         <h1>Your Cart</h1>
                         <hr>
-                        @if(Session::has('car_id'))
+                        @if(Session::has('list'))
                         @else
                         <p>Your cart is empty</p>
                         @endif
@@ -31,52 +31,30 @@
 <div class="container d-lg-flex">
     <div class="box-1 bg-light user">
 {{-- foreach car_id in session display  --}}
-
     @if(Session::has('car_id'))
     <div class="alert alert-primary">
-        <ul>
-            @foreach(Session::get('list') as $car_id)
-            @foreach($cars as $car)
-            <li> {{$car_id === $car->id ? $car->id : '' }} {{$car_id === $car->id ? $car->brand : '' }} {{$car_id === $car->id ? $car->model : '' }}</li>
-
-             @endforeach
-            @endforeach
-        </ul>
     </div>
     @endif
         <div class="box-inner-1 pb-3 mb-3 ">
-            <div class="d-flex justify-content-between mb-3 userdetails">
-                <p class="fw-bold">Car</p>
-                <p class="fw-lighter"><span class="fas fa-euro-sign"></span>
-                    @if(Session::has('list'))
-                    {{-- {{dd(Session::get('list'))}} --}}
-                    @foreach(Session::get('list') as $car_id)
-                    @foreach($cars as $car)
-                    <!-- count price the total hourly price-->
-                    @if($car_id === $car->id)
-                        {{-- <li>{{$car_id === $car->id ? $car->hourlyPrice: '' }}</li> --}}
-                        {{-- count the total hourlyPrice and display it --}}
-                        {{-- @php
-                            $price = $car->hourlyPrice;
-                            $totalPrice = $price * count(Session::get('car_id'));
+            <div class="  mb-3 ">
+                    
+                    <ul class="list-group">
+                        <h3>Chosen Cars</h3>
+                        @foreach($session_cars as $session)
+                        <li class="list-group-item list-group-item-primary">€{{$session->hourlyPrice}} {{$session->brand}} ~ {{$session->model}} </li>
+                        @endforeach
+                      </ul>
+
+                     {{-- <li>{{$car_id === $car->id ? $car->hourlyPrice: '' }}</li> --}}
+                     {{-- count the total hourlyPrice and display it --}}
+                     {{-- @php
+                        $price = $car->hourlyPrice;
+                        $totalPrice = $price * count(Session::get('car_id'));
                         @endphp --}}
-                        <li>{{$totalPrice}}</li>
-                    @endif                    
-                    @endforeach
-                    @endforeach
-                    @endif
-                </p>
+                        {{-- <li>{{$totalPrice}}</li> --}}
+                        
             </div>
-            <div id="my" class="carousel slide carousel-fade img-details" data-bs-ride="carousel" data-bs-interval="2000">
-                <div class="carousel-indicators"> <button type="button" data-bs-target="#my" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button> <button type="button" data-bs-target="#my" data-bs-slide-to="1" aria-label="Slide 2"></button> <button type="button" data-bs-target="#my" data-bs-slide-to="2" aria-label="Slide 3"></button> </div>
-                <div class="carousel-inner">
-                    <div class="carousel-item active"> <img src="" class="d-block w-100"> </div>
-                </div> <button class="carousel-control-prev" type="button" data-bs-target="#my" data-bs-slide="prev">
-                    <div class="icon"> <span class="fas fa-arrow-left"></span> </div> <span class="visually-hidden">Previous</span>
-                </button> <button class="carousel-control-next" type="button" data-bs-target="#my" data-bs-slide="next">
-                    <div class="icon"> <span class="fas fa-arrow-right"></span> </div> <span class="visually-hidden">Next</span>
-                </button>
-            </div>
+        
             <p class="dis info my-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cupiditate quos ipsa sed officiis odio </p>
            
         </div>
@@ -88,7 +66,7 @@
                 <p class="dis mb-3">Complete your purchase by providing your payment details</p>
             </div>
             <form action="">
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <p class="dis fw-bold mb-2">Full Name</p> <input class="form-control" type="email">
                 </div>
                 <div class="mb-3">
@@ -102,7 +80,7 @@
                 </div>
                 <div class="mb-3">
                     <p class="dis fw-bold mb-2">Addres</p> <input class="form-control" type="text" >
-                </div>
+                </div> --}}
                 <div>
                     <p class="dis fw-bold mb-2">Phone number</p>
                     <input class="form-control" type="text">
@@ -114,9 +92,9 @@
                             <input type="date" id="start" name="trip-end">
                             <div class="d-flex align-items-center justify-content-between mb-2">
                                 <p class="fw-bold">Total</p>
-                                <p class="fw-bold"><span class="fas fa-dollar-sign"></span>35.80</p>
+                                <p class="fw-bold"><span class="fas fa-euro-sign"></span>{{$total_price}}</p>
                             </div>
-                            <div class="btn btn-primary mt-2">Print Invoice<span class="fas fa-euro-sign px-1"></span>35.80 </div>
+                            <div class="btn btn-primary mt-2">Print Invoice<span class="fas fa-euro-sign px-1"></span>{{$total_price}} </div>
                         </div>
                     </div>
                 </div>

@@ -24,6 +24,12 @@ class RegisterController extends Controller
 
     use RegistersUsers;
 
+
+     public function showRegistrationForm()
+     {
+         return view('auth.costumRegister');
+     }
+
     /**
      * Where to redirect users after registration.
      *
@@ -53,6 +59,11 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'postal_code' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
+            'adress' => ['required', 'string', 'max:255'],
+            'cellphone' => ['required', 'string', 'max:255'],
+
         ]);
     }
 
@@ -68,6 +79,11 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'postal_code' => $data['postal_code'],
+            'city' => $data['city'],
+            'adress' => $data['adress'],
+            'cellphone' => $data['cellphone'],
+
         ]);
     }
 }

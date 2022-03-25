@@ -38,6 +38,7 @@ class CarController extends Controller
         
         $car_id = request()->id;
         $car_id = $request->id;
+
         $list = session()->get('list');
         array_push($list, $car_id);
         session()->put('list', $list);
