@@ -134,59 +134,7 @@
                                 </div>
                             </div>
 
-{{-- 
-                                <div class="form-outline mb-4">
-                                    <label for="email"
-                                        class="col-mb-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
-                                    <input type="email" id="email" class="form-control" />
-                                    @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <!-- Password input -->
-                            <div class="form-outline mb-4">
-                                <label for="password"
-                                    class="col-mb-4 col-form-label text-md-end">{{ __('Password') }}</label>
-                                <input type="password" id="password" class="form-control" />
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6 offset-md-4">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                                            {{ old('remember') ? 'checked' : '' }}>
-
-                                        <label class="form-check-label" for="remember">
-                                            {{ __('Remember Me') }}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div> --}}
-
-
-                            {{-- <!-- Checkbox -->
-      <div class="form-check d-flex justify-content-center mb-4">
-        <input
-                class="form-check-input me-2"
-                type="checkbox"
-                value=""
-                id="form2Example33"
-                checked
-                />
-        <label class="form-check-label" for="form2Example33">
-          Subscribe to our newsletter
-        </label>
-      </div> --}}
-
+                            
                             <!-- Submit button -->
                             <button type="submit" class="btn btn-primary btn-block mb-4">
                                 {{ __('Login') }}

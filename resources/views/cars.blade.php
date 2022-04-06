@@ -22,7 +22,6 @@
 @if(session()->has('success'))
     <div class="alert alert-success">
         <li>{{ session()->get('success')}}</li>
-        
     </div>
 @endif
 <div class="container mt-5 mb-5">
@@ -33,9 +32,9 @@
                 <div class="p-carousel">
                     <div class="carousel slide" data-ride="carousel" id="carousel-1">
                         <div class="carousel-inner" role="listbox">
-                            <div class="carousel-item active"><img class="w-100 d-block" src="https://preview.free3d.com/img/2003/08/1688639047162922962/thfeznx6-900.jpg" alt="Slide Image"></div>
+                            {{-- <div class="carousel-item active"><img class="w-100 d-block" src="https://preview.free3d.com/img/2003/08/1688639047162922962/thfeznx6-900.jpg" alt="Slide Image"></div>
                             <div class="carousel-item"><img class="w-100 d-block" src="https://preview.free3d.com/img/2003/08/1688639047162922962/onz1x5mj-900.jpg" alt="Slide Image"></div>
-                            <div class="carousel-item"><img class="w-100 d-block" src="https://preview.free3d.com/img/2003/08/1688639047162922962/p8ht9krb-900.jpg" alt="Slide Image"></div>
+                            <div class="carousel-item"><img class="w-100 d-block" src="https://preview.free3d.com/img/2003/08/1688639047162922962/p8ht9krb-900.jpg" alt="Slide Image"></div> --}}
                         </div>
                         <div><a class="carousel-control-prev" href="#carousel-1" role="button" data-slide="prev"><span class="carousel-control-prev-icon"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#carousel-1" role="button" data-slide="next"><span class="carousel-control-next-icon"></span><span class="sr-only">Next</span></a></div>
                         <ol class="carousel-indicators">
