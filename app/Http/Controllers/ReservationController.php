@@ -24,12 +24,12 @@ class ReservationController extends Controller
     {
         $reservations = Reservation::all();
         //get whole session     
-        return view('reservations', compact('reservations'));
+        return view('admin', compact('reservations'));
     }
 
     public function printInvoices(StoreReservationRequest $request)
     {
-        
+
         for ($i = 0; $i < count($request->car_id); $i++) {
             $reservation = new Reservation;
             $reservation->car_id = $request->car_id[$i];
@@ -39,13 +39,18 @@ class ReservationController extends Controller
             $reservation->reservation_time = $request->pickupTime;
             $reservation->status = 'pending';
             $request->total_price;
-            // $reservation->save();
+            $reservation->save();
         }
 
-        $count = count($request->car_id);  
+        //first get difrence then calculte total price
+        $start = new \DateTime($request->pickupDate);
+        $end = new \DateTime($request->returnDate);
+        $days = $start->diff($end)->days;
 
-        
-        
+        //multiply days by price
+        $totalPrice = $days * $request->total_price;
+
+
         $client = new Party([
             'name'          => 'Roosevelt Lloyd',
             'phone'         => '(520) 318-9486',
@@ -55,7 +60,7 @@ class ReservationController extends Controller
                 'business id' => '365#GG',
             ],
         ]);
-        
+
         $customer = new Party([
             'code'          => '#22663214',
             'name'          =>  auth()->user()->name,
@@ -67,35 +72,45 @@ class ReservationController extends Controller
             ],
         ]);
 
+        // totalAmount is the hourly price of the car multiplied by the number of hours
+        foreach ($request->car_id as $car_id) {
+            $car = Car::find($car_id);
+            $totalAmount = $car->hourlyPrice * $request->total_price;
+        }
+
         //foreach carid in session put in new invoiceItem
-        
-        foreach ($request->car_id as $items) {
-        $items = [
-            (new InvoiceItem())
-                    ->title(car::find($items)->brand . ' ' . car::find($items)->model)
-                    ->description(' licence plate:' . ' ' . car::find($items)->licence_plate)
-                    ->pricePerUnit(car::find($items)->hourlyPrice)
-                    ->quantity($count)
-                    ->discount(0),
-                ];
-            }
-            
-            $notes = [
-                'Your pick up invoice',
-                'Please bring this invoice when attending the pick up', 
-            ];
+        foreach ($request->car_id as $item) {
+           $items [] = (new InvoiceItem())
+            ->title(car::find($item)->brand . ' ' . car::find($item)->model)
+            ->description(' licence plate:' . ' ' . car::find($item)->licence_plate)
+            ->pricePerUnit(car::find($item)->hourlyPrice)
+            ->discount(0)
+            ->subTotalPrice(0)
+            ->tax(0);
+        }
+
+        $notes = [
+            'Please bring this invoice when attending the pick up',
+            " ",
+            //pickup date and time 
+            'Pickup Date: ' . $request->pickupDate . ' ' . $request->pickupTime,
+            //return date
+            'Return Date: ' . $request->returnDate,
+            'Thank you for choosing Rent a Car',
+        ];
         $notes = implode("<br>", $notes);
-        
+
         $invoice = Invoice::make('receipt')
             ->series('BIG')
             // ability to include translated invoice status
             // in case it was paid
             ->status(__('invoices::invoice.paid'))
+            ->totalAmount($totalPrice)
             ->sequence(667)
             ->serialNumberFormat('{SEQUENCE}/{SERIES}')
             ->seller($client)
             ->buyer($customer)
-            ->date(now()->subWeeks(3))
+            ->date(now()->subWeeks(0))
             ->dateFormat('m/d/Y')
             ->payUntilDays(14)
             ->currencySymbol('€')
@@ -109,24 +124,16 @@ class ReservationController extends Controller
             // ->logo(public_path('vendor/invoices/sample-logo.png'))
             // You can additionally save generated invoice to configured disk
             ->save('public');
-        
+
         // $link = $invoice->url();
         // Then send email to party with link
 
-        // And return invoice itself to browser or have a different view
-        return $invoice->stream();
-
-        return redirect()->route('newReservation')->with('success', 'Reservation added successfully');
+        //delete carsfrom session
+        
+        Session::forget('list');        
+        return $invoice->stream() ;
+        return redirect()->route('cars')->with('success', 'Reservation added successfully');
     }
-
-
-
-
-
-
-
-
-
 
     /**
      * Show the form for creating a new resource.
@@ -139,12 +146,16 @@ class ReservationController extends Controller
         $cars = Car::all();
 
         $session_cars = Car::find(Session::get('list'));
-        //count the total price of the car
         $total_price = 0;
-        foreach ($session_cars as $car) {
-            $total_price += $car->hourlyPrice;
+
+        if (empty($session_cars)) {
+            return redirect()->route('cars')->with('error', 'Please select a car first');
+        } else {
+            foreach ($session_cars as $car) {
+                $total_price += $car->hourlyPrice;
+            }
+            return view('newReservation', compact('reservation', 'cars', 'session_cars', 'total_price'));
         }
-        return view('newReservation', compact('reservation', 'cars', 'session_cars', 'total_price'));
     }
 
 

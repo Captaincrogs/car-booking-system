@@ -11,10 +11,12 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark"> <a class="navbar-brand" href="#" data-abc="true">rentAcar</a> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
     <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active"> <a class="nav-link" href="#" data-abc="true">Home <span class="sr-only">(current)</span></a> </li>
+            <li class="nav-item active"> <a class="nav-link" href="/" data-abc="true">Home <span class="sr-only">(current)</span></a> </li>
             <li class="nav-item"> <a class="nav-link" href="/cars" data-abc="true">Car Gallery</a> </li>
-            <li class="nav-item"> <a class="nav-link" href="/reservations" data-abc="true">Reservations</a> </li>
-            <li class="nav-item"> <a class="nav-link" href="/newReservation" data-abc="true"></a></li>
+            @if(Auth::user()->role == 'admin')
+            <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
+            @endif
+            <li class="nav-item"> <a class="nav-link" href="/newReservation" data-abc="true">Cart</a></li>
         </ul>
     </div>
 </nav>
@@ -22,6 +24,11 @@
 @if(session()->has('success'))
     <div class="alert alert-success">
         <li>{{ session()->get('success')}}</li>
+    </div>
+@endif
+@if(session()->has('error'))
+    <div class="alert alert-danger">
+        <li>{{ session()->get('error')}}</li>
     </div>
 @endif
 <div class="container mt-5 mb-5">

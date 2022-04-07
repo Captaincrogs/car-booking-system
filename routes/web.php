@@ -32,7 +32,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('/cars/checkout', [App\Http\Controllers\CarController::class, 'checkout']);
     Route::get('/cars', [App\Http\Controllers\CarController::class, 'index'])->name('cars');
-    // Route::get('/cars/{id}', [App\Http\Controllers\CarController::class, 'store'])->name('cars.store');
     Route::get('/invoices', [App\Http\Controllers\InvoiceController::class, 'index'])->name('invoices');
-    
+    Route::get('/admin', [App\Http\Controllers\ReservationController::class, 'index'])->name('admin');
 });

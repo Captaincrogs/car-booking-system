@@ -265,7 +265,7 @@
                     @if($invoice->hasItemTax)
                         <th scope="col" class="text-right border-0">{{ __('invoices::invoice.tax') }}</th>
                     @endif
-                    <th scope="col" class="text-right border-0 pr-0">{{ __('invoices::invoice.sub_total') }}</th>
+                    {{-- <th scope="col" class="text-right border-0 pr-0">{{ __('invoices::invoice.sub_total') }}</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -297,9 +297,9 @@
                         </td>
                     @endif
 
-                    <td class="text-right pr-0">
+                    {{-- <td class="text-right pr-0">
                         {{ $invoice->formatCurrency($item->sub_total_price) }}
-                    </td>
+                    </td> --}}
                 </tr>
                 @endforeach
                 {{-- Summary --}}

@@ -26,9 +26,11 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav ms-auto">
+                        @if(Auth::user()->role == 'admin')
                         <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/reservations">Reservations</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/login">Signup</a></li>
+                        @endif
+                        <li class="nav-item"><a class="nav-link" href="{{ route('cars') }}">Car Gallery</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/login">Profile</a></li>
                     </ul>
                 </div>
             </div>
