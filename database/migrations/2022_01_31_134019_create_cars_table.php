@@ -23,9 +23,11 @@ class CreateCarsTable extends Migration
             $table->boolean('gps')->nullable();
             $table->integer('horsepower')->nullable();
             $table->integer('top_speed')->nullable();
-            $table->integer('hourlyPrice')->nullable();
+            $table->integer('daily_price')->nullable();
             $table->integer('amount')->nullable();
             $table->string('licence_plate')->nullable();
+            $table->string('image')->nullable();
+
         });
     }
 

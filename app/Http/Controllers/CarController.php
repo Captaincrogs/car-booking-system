@@ -32,8 +32,10 @@ class CarController extends Controller
 
     public function checkout(request $request)
     {
+        // dd($request->id);   
         if(!Session::has('list')){
-            session()->put('list', []);
+            //put 'list' and the cars id in session
+            Session::put('list' , [$request->id]);
         }
         
         $car_id = request()->id;
@@ -43,7 +45,7 @@ class CarController extends Controller
         array_push($list, $car_id);
         session()->put('list', $list);
         Session::save();
-        // dd(session()->get('list'));
+       
         return redirect()->route('newReservation')->with('success', 'Car added successfully');
     }
 

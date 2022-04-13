@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
+use Illuminate\Http\Request;
+
 use App\Models\Car;
+use App\Models\User;
 use App\Models\Reservation;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Auth;
 
 use LaravelDaily\Invoices\Invoice;
 use LaravelDaily\Invoices\Classes\Party;
@@ -23,8 +27,9 @@ class ReservationController extends Controller
     public function index()
     {
         $reservations = Reservation::all();
+        $cars = Car::all();
         //get whole session     
-        return view('admin', compact('reservations'));
+        return view('admin', compact('reservations', 'cars'));
     }
 
     public function printInvoices(StoreReservationRequest $request)
@@ -52,12 +57,12 @@ class ReservationController extends Controller
 
 
         $client = new Party([
-            'name'          => 'Roosevelt Lloyd',
+            'name'          => 'RentaCar'  . Auth::user()->name . rand(1, 100),
             'phone'         => '(520) 318-9486',
             'custom_fields' => [
                 'note'        => 'IDDQD',
                 'company'   => "Rent a Car",
-                'business id' => '365#GG',
+                'address'   => "123 Main St",
             ],
         ]);
 
@@ -125,15 +130,83 @@ class ReservationController extends Controller
             // You can additionally save generated invoice to configured disk
             ->save('public');
 
-        // $link = $invoice->url();
-        // Then send email to party with link
-
-        //delete carsfrom session
-        
-        Session::forget('list');        
-        return $invoice->stream() ;
+        Session::forget('list');   
+        $user = User::find(Auth::user()->id);
+        if($user->user_orders == null){
+            $user->user_orders = $user->user_orders . $invoice->url();
+        }
+        else{
+            $user->user_orders = $user->user_orders . '->'. $invoice->url();
+        }
+        $user->save();
+        return $invoice->stream();     
         return redirect()->route('cars')->with('success', 'Reservation added successfully');
     }
+
+    public function sessionRemove(Request $request){
+        
+        //list heeft nog geen waarde maar is alle id's hierdoor werkt het niet op specifieke auto te verwijderen
+        Session::forget('list',[$request->car_id]);
+        Session::save();
+        return redirect()->route('cars');
+    }
+
+    public function adminDeleteReservation(Request $request){
+        $reservation = Reservation::find($request->reservation_id);
+        $reservation->delete();
+        return redirect()->route('admin')->with('success', 'Reservation deleted successfully');
+    }
+
+    public function get_invoice(Request $request){
+        $invoice = user::find($request->id)->user_orders;
+        $invoice = explode('->', $invoice);
+        $invoice = array_filter($invoice);
+        $test = explode('/', $invoice[0]);
+        return response()->download(public_path().'/storage/'. $test[count($test)-1]);
+   
+    }
+
+    public function add_cars(Request $request){
+        // $car = new Car;
+        // $car->brand = $request->brand;
+        // $car->model = $request->model;
+        // $car->licence_plate = $request->licence_plate;
+        // $car->hourlyPrice = $request->hourlyPrice;
+        // $car->save();
+        // return redirect()->route('cars')->with('success', 'Car added successfully');
+        // $this->validate($request, [
+        //     'brand' => 'required',
+        //     'model' => 'required',
+        //     'licence_plate' => 'required',
+        //     'hourlyPrice' => 'required',
+        // ]);
+        $car_categories = [
+            'supersport',
+            'sport',
+            'standard',
+            'economy',
+            'luxury',
+        ];
+
+        $has_gps = [
+            '1',
+            '0',
+        ];
+        $reservations = Reservation::all();
+        $cars = Car::all();
+        return view('admin_add_cars', compact('reservations', 'cars' , 'car_categories', 'has_gps'));
+    
+    }
+
+    public function update_cars(Request $request){
+        //get request data
+        $car = Car::find($request->car_id);
+        dd($car);
+        
+        return redirect()->route('cars')->with('success', 'Car updated successfully');
+    }
+
+
 
     /**
      * Show the form for creating a new resource.

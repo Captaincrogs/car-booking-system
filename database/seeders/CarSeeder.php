@@ -22,9 +22,10 @@ class CarSeeder extends Seeder
             'category' => 'Sport',
             'seats' => '5',
             'gps' => '1',
-            'hourlyPrice' => '50',
+            'daily_price' => '50',
             'horsePower' => '700',
             'top_speed' => '280',
+            "image" => "mustang.jpg",
         ],
         [
             'licence_plate' => 'DEF456',
@@ -33,9 +34,10 @@ class CarSeeder extends Seeder
             'category' => 'sport',
             'seats' => '5',
             'gps' => '1',
-            'hourlyPrice' => '30',
+            'daily_price' => '30',
             'horsepower' => '777',
             'top_speed' => '270',
+            "image"  => "Dodge-Challenger_SRT_Hellcat_Widebody-2018-1280-02.jpg"
         ],
         [
         
@@ -45,9 +47,10 @@ class CarSeeder extends Seeder
             'category' => 'Standard',
             'seats' => '5',
             'gps' => '0',
-            'hourlyPrice' => '2',
+            'daily_price' => '2',
             'horsepower' => '10',
             'top_speed' => '100',
+            "image"  => "Fiat-Panda-1991-1280-01.jpg"
         ],
         [
             'licence_plate' => 'JKL012',
@@ -56,9 +59,10 @@ class CarSeeder extends Seeder
             'category' => 'SuperSport',
             'seats' => '5',
             'gps' => '0',
-            'hourlyPrice' => '1',
+            'daily_price' => '1',
             'horsepower' => '10',
             'top_speed' => '80',
+            "image" => "Fiat-Multipla-2002-1280-11.jpg"
         ],
         [
             'licence_plate' => 'MNO345',
@@ -67,9 +71,10 @@ class CarSeeder extends Seeder
             'category' => 'Sport',
             'seats' => '5',
             'gps' => '1',
-            'hourlyPrice' => '30',
+            'daily_price' => '30',
             'horsepower' => '200',
             'top_speed' => '200',
+            "image" => 'BMW-X5-2019-hd.jpg'
 
         ],
         [
@@ -79,9 +84,11 @@ class CarSeeder extends Seeder
             'category' => 'Sport',
             'seats' => '3',
             'gps' => '1',
-            'hourlyPrice' => '60',
+            'daily_price' => '60',
             'horsepower' => '500',
             'top_speed' => '300',
+            "image" => 'Porsche-911_GT3_Touring-2022-hd.jpg'
+
         ],
         [
             'licence_plate' => 'STU901',
@@ -90,9 +97,11 @@ class CarSeeder extends Seeder
             'category' => 'Sport',
             'seats' => '3',
             'gps' => '1',
-            'hourlyPrice' => '70',
+            'daily_price' => '70',
             'horsepower' => '700',
             'top_speed' => '380',
+            "image" => 'Lamborghini-Aventador_S_by_Skyler_Grey-2019-hd.jpg'
+ 
         ],
         [
             'licence_plate' => 'VWX345',
@@ -101,9 +110,10 @@ class CarSeeder extends Seeder
             'category' => 'Standard',
             'seats' => '5',
             'gps' => '1',
-            'hourlyPrice' => '60',
+            'daily_price' => '60',
             'horsePower' => '120',
             'top_speed' => '200',
+            "image" => 'Volkswagen-Golf-2020-hd.jpg'
         ],
         [
             'licence_plate' => 'YZU901',
@@ -112,9 +122,10 @@ class CarSeeder extends Seeder
             'category' => 'Standard',
             'seats' => '5',
             'gps' => '1',
-            'hourlyPrice' => '40',
+            'daily_price' => '40',
             'horsepower' => '300',
             'top_speed' => '220',
+            "image" => 'Audi-A4-1999-1280-01.jpg'
         ],
         [
             'licence_plate' => 'BCD123',
@@ -123,9 +134,10 @@ class CarSeeder extends Seeder
             'category' => 'Standard',
             'seats' => '5',
             'gps' => '1',
-            'hourlyPrice' => '40',
+            'daily_price' => '40',
             'horsepower' => '200',
             'top_speed' => '200',
+            "image" => 'Ford-C-MAX-2011-1280-01.jpg'
             
         ]
 
