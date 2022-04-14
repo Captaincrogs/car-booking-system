@@ -2,6 +2,10 @@
 @if (Auth::user()->role == 'admin')
     <html lang="en">
 
+    <!DOCTYPE html>
+
+    <html lang="en">
+
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -60,13 +64,7 @@
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                                 data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                             </a>
-                            {{-- <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne"
-                                data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
-                                </nav>
-                            </div> --}}
+
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                                 data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
@@ -86,7 +84,7 @@
                                         data-bs-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
 
-                                            <a class="nav-link" current href="#">Add new cars</a>
+                                            <a class="nav-link" current href="add_cars">Add new cars</a>
                                         </nav>
                                     </div>
 
@@ -101,8 +99,7 @@
                                     <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne"
                                         data-bs-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="404.html">404 Page</a>
-                                            <a class="nav-link" href="500.html">500 Page</a>
+                                            <a class="nav-link" href="#">Edit new cars</a>
                                         </nav>
                                     </div>
                                 </nav>
@@ -164,26 +161,29 @@
                                 </tfoot>
                                 <tbody>
                                     @foreach ($cars as $car)
-                                        <tr>
-                                            <td>{{ $car->brand }}</td>
-                                            <td>{{ $car->model }}</td>
-                                            <td>{{ $car->category }}</td>
-                                            <td>{{ $car->licence_plate }}</td>
-                                            <td>{{ $car->gps == 1 ? 'yes' : 'no' }}</td>
-                                            <td>
-                                                {{-- <form action="{{ route('cars.destroy', $car->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE') --}}
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                                {{-- </form> --}}
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                    id="submit" data-bs-target="#exampleModal"
-                                                    data-target="#exampleModal">Edit car
-                                                    info
-                                                    <input type="text" hidden id="car_id" value="{{ $car->id }}">
-                                                </button>
-                                            </td>
-                                        </tr>
+                                        <form action="">
+                                            <tr>
+                                                <td>{{ $car->brand }}</td>
+                                                <td>{{ $car->model }}</td>
+                                                <td>{{ $car->category }}</td>
+                                                <td>{{ $car->licence_plate }}</td>
+                                                <td>{{ $car->gps == 1 ? 'yes' : 'no' }}</td>
+                                                <td>{{ $car->id }}</td>
+                                                <td>
+                                                    {{-- <form action="{{ route('cars.destroy', $car->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE') --}}
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                    {{-- </form> --}}
+                                                    <button type="button" class="btn btn-primary edit" id="edit"
+                                                        data-bs-toggle="modal" id="submit"
+                                                        data-bs-target="#exampleModal" data-target="#exampleModal">Edit
+                                                        car
+                                                        info
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </form>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -205,42 +205,57 @@
                             <form action="/admin/newcars/update" method="post">
                                 @csrf
                                 <div class="mb-3">
-
                                     <label for="brand" name="brand" class="col-form-label" for="brand">Brand:</label>
-                                    <input type="text" class="form-control" id="brand" disabled>
+                                    <input type="text" class="form-control" id="brnd" name="brand" disabled>
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="model" name="model" class="col-form-label" required>Model:</label>
-                                    <input type="text" class="form-control" id="model">
+                                    <input type="text" class="form-control" id="mdl" name="model">
                                 </div>
+
                                 <div class="mb-3">
-                                    <label for="category" name="category" class="col-form-label" required>Select
+                                    <label for="category" class="col-form-label" required>Select
                                         category:</label>
-                                    <select class="form-control" required>
+                                    <select class="form-control" name="category">
                                         @foreach ($car_categories as $category)
                                             <option>{{ $category }}</option>
                                         @endforeach
                                     </select>
                                 </div>
+
                                 <div class="mb-3">
                                     <label for="licence_plate" name="licence_plate" class="col-form-label"
                                         required>Licence
                                         Plate:</label>
-                                    <input type="text" class="form-control" id="licence_plate">
+                                    <input type="text" class="form-control" id="lcp" name="licence_plate">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="amount" name="amount" class="col-form-label" required>Amount:
+                                    </label>
+                                    <input min="1" max="10" type="number" class="form-control" id="amount"
+                                        name="amount">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="price" class="col-form-label" required>daily rent price €:
+                                    </label>
+                                    <input min="1" type=" number" class="form-control" id="daily_price"
+                                        name="daily_price">
                                 </div>
 
                                 <div class="mb-3">
                                     <label for="gps" name="gps" class="col-form-label">Car armed with gps ?</label>
-                                    <select class="form-control">
-
+                                    <select class="form-control" name="gps">
                                         @foreach ($has_gps as $gps)
-                                            <option> {{ $gps == 1 ? 'yes' : 'no' }}</td>
+                                            <option> {{ $gps == 1 ? 'has gps' : 'no gps' }}</td>
                                             </option>
                                         @endforeach
                                     </select>
-                                    id
-                                    <input type="text" class="car_id" id="car_id" name="car_id">
 
+                                </div>
+                                <div class="mb-3">
+
+                                    <input type="text" hidden class="form-control" name='car_id' id="car_id">
                                 </div>
                                 <div class="text-center">
                                     <img src="https://wallpaper.dog/large/5507296.jpg " width="280" height="236"
@@ -269,31 +284,30 @@
         <script type="text/javascript" src="{{ URL::asset('js/datatables-simple-demo.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     </body>
     <script>
-        $('#exampleModal').on('show.bs.modal', function(event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var recipient = button.data('bs-whatever') // Extract info from data-* attributes
-        })
+        $(document).ready(function() {
+            $(document).on("click", ".edit", function() {
+                $tr = $(this).closest('tr');
 
-        $('#submit').click(function(e) {
-            e.preventDefault();
-            var car_id = $('#car_id').val();
-            $.ajax({
-                type: 'POST',
-                url: '/admin/newcars/update',
-                data: {
-                    '_token': $('input[name=_token]').val(),
-                    'car_id': car_id,
-                },
-                success: function(data) {
-                    console.log(data);
-                    $('#exampleModal').modal('hide');
-                    location.reload();
-                }
+                var data = $tr.children("td").map(function() {
+                    return $(this).text();
+                }).get();
+
+                console.log(data);
+
+                $('#brnd').val(data[0]);
+                $('#mdl').val(data[1]);
+                $('#lcp').val(data[3]);
+                $('#gps').val(data[4]);
+                $('#car_id').val(data[5]);
             });
         });
     </script>
+
+
+    </html>
 @else
     <div>
         <h1>You are not authorized to access this page {{ Auth::user()->name }} :)</h1>

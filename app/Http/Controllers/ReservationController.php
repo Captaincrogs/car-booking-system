@@ -85,13 +85,13 @@ class ReservationController extends Controller
 
         //foreach carid in session put in new invoiceItem
         foreach ($request->car_id as $item) {
-           $items [] = (new InvoiceItem())
-            ->title(car::find($item)->brand . ' ' . car::find($item)->model)
-            ->description(' licence plate:' . ' ' . car::find($item)->licence_plate)
-            ->pricePerUnit(car::find($item)->hourlyPrice)
-            ->discount(0)
-            ->subTotalPrice(0)
-            ->tax(0);
+            $items[] = (new InvoiceItem())
+                ->title(car::find($item)->brand . ' ' . car::find($item)->model)
+                ->description(' licence plate:' . ' ' . car::find($item)->licence_plate)
+                ->pricePerUnit(car::find($item)->hourlyPrice)
+                ->discount(0)
+                ->subTotalPrice(0)
+                ->tax(0);
         }
 
         $notes = [
@@ -130,43 +130,45 @@ class ReservationController extends Controller
             // You can additionally save generated invoice to configured disk
             ->save('public');
 
-        Session::forget('list');   
+        Session::forget('list');
         $user = User::find(Auth::user()->id);
-        if($user->user_orders == null){
+        if ($user->user_orders == null) {
             $user->user_orders = $user->user_orders . $invoice->url();
-        }
-        else{
-            $user->user_orders = $user->user_orders . '->'. $invoice->url();
+        } else {
+            $user->user_orders = $user->user_orders . '->' . $invoice->url();
         }
         $user->save();
-        return $invoice->stream();     
+        return $invoice->stream();
         return redirect()->route('cars')->with('success', 'Reservation added successfully');
     }
 
-    public function sessionRemove(Request $request){
-        
+    public function sessionRemove(Request $request)
+    {
+
         //list heeft nog geen waarde maar is alle id's hierdoor werkt het niet op specifieke auto te verwijderen
-        Session::forget('list',[$request->car_id]);
+        Session::forget('list', [$request->car_id]);
         Session::save();
         return redirect()->route('cars');
     }
 
-    public function adminDeleteReservation(Request $request){
+    public function adminDeleteReservation(Request $request)
+    {
         $reservation = Reservation::find($request->reservation_id);
         $reservation->delete();
         return redirect()->route('admin')->with('success', 'Reservation deleted successfully');
     }
 
-    public function get_invoice(Request $request){
+    public function get_invoice(Request $request)
+    {
         $invoice = user::find($request->id)->user_orders;
         $invoice = explode('->', $invoice);
         $invoice = array_filter($invoice);
         $test = explode('/', $invoice[0]);
-        return response()->download(public_path().'/storage/'. $test[count($test)-1]);
-   
+        return response()->download(public_path() . '/storage/' . $test[count($test) - 1]);
     }
 
-    public function add_cars(Request $request){
+    public function add_cars(Request $request)
+    {
         // $car = new Car;
         // $car->brand = $request->brand;
         // $car->model = $request->model;
@@ -194,18 +196,36 @@ class ReservationController extends Controller
         ];
         $reservations = Reservation::all();
         $cars = Car::all();
-        return view('admin_add_cars', compact('reservations', 'cars' , 'car_categories', 'has_gps'));
-    
+        return view('admin_add_cars', compact('reservations', 'cars', 'car_categories', 'has_gps'));
     }
 
-    public function update_cars(Request $request){
-        //get request data
+    public function update_cars(Request $request)
+    {
+        $car = new Car;
         $car = Car::find($request->car_id);
-        dd($car);
-        
+        //timestamp of today 
+        $car->updated_at = now();
+        $car->created_at = $car->created_at;
+        $car->seats = $car->seats;
+        $car->brand = $car->brand;
+        $car->model = $request->model;
+        $car->licence_plate = $request->licence_plate;
+        //transform yes to 1 and no to 0
+        if ($request->gps == 'yes') {
+            $car->gps = 1;
+        } else {
+            $car->gps = 0;
+        }
+        $car->amount = $request->amount;
+        // seats does not change standard value of 5
+
+        $car->daily_price = $request->daily_price;
+        $car->category = $request->category;
+
+        $car->save();
+
         return redirect()->route('cars')->with('success', 'Car updated successfully');
     }
-
 
 
     /**

@@ -27,6 +27,7 @@ class CreateCarsTable extends Migration
             $table->integer('amount')->nullable();
             $table->string('licence_plate')->nullable();
             $table->string('image')->nullable();
+            
 
         });
     }
