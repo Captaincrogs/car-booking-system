@@ -76,7 +76,7 @@
                                     <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne"
                                         data-bs-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="admin/newcars">edit the cars</a>
+                                            <a class="nav-link" href="admin/edit/cars">edit the cars</a>
                                         </nav>
                                     </div>
                                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -88,7 +88,7 @@
                                     <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne"
                                         data-bs-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="401.html">add new cars to collection</a>
+                                            <a class="nav-link" href="admin/add/cars">add new cars to collection</a>
                                         </nav>
                                     </div>
                                 </nav>

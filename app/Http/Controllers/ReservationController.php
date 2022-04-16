@@ -167,21 +167,8 @@ class ReservationController extends Controller
         return response()->download(public_path() . '/storage/' . $test[count($test) - 1]);
     }
 
-    public function add_cars(Request $request)
+    public function edit_cars(Request $request)
     {
-        // $car = new Car;
-        // $car->brand = $request->brand;
-        // $car->model = $request->model;
-        // $car->licence_plate = $request->licence_plate;
-        // $car->hourlyPrice = $request->hourlyPrice;
-        // $car->save();
-        // return redirect()->route('cars')->with('success', 'Car added successfully');
-        // $this->validate($request, [
-        //     'brand' => 'required',
-        //     'model' => 'required',
-        //     'licence_plate' => 'required',
-        //     'hourlyPrice' => 'required',
-        // ]);
         $car_categories = [
             'supersport',
             'sport',
@@ -196,7 +183,24 @@ class ReservationController extends Controller
         ];
         $reservations = Reservation::all();
         $cars = Car::all();
-        return view('admin_add_cars', compact('reservations', 'cars', 'car_categories', 'has_gps'));
+        return view('admin_edit_cars', compact('reservations', 'cars', 'car_categories', 'has_gps'));
+    }
+
+    public function add_cars(Request $request)
+    {
+        //get all cars
+        $cars = Car::all();
+        // $car = new Car();
+        // $car->brand = $request->brand;
+        // $car->model = $request->model;
+        // $car->licence_plate = $request->licence_plate;
+        // $car->year = $request->year;
+        // $car->hourlyPrice = $request->hourlyPrice;
+        // $car->car_category = $request->car_category;
+        // $car->has_gps = $request->has_gps;
+        // $car->save();
+        // return redirect()->route('admin')->with('success', 'Car added successfully');
+        return view('admin_add_cars', compact('cars'));
     }
 
     public function update_cars(Request $request)
@@ -225,6 +229,15 @@ class ReservationController extends Controller
         $car->save();
 
         return redirect()->route('cars')->with('success', 'Car updated successfully');
+
+
+    }
+
+    public function delete_cars(Request $request)
+    {
+        $car = Car::find($request->id);
+        $car->delete();
+        return redirect()->route('cars')->with('success', 'Car deleted successfully');
     }
 
 
@@ -250,6 +263,7 @@ class ReservationController extends Controller
             return view('newReservation', compact('reservation', 'cars', 'session_cars', 'total_price'));
         }
     }
+
 
 
 
