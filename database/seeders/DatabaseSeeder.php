@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         
         \App\Models\User::factory(3)->create();
         $this->call(CarSeeder::class);
-        $this->call(ReservationSeeder::class);
+        // $this->call(ReservationSeeder::class);
         $this->call(InvoiceSeeder::class);
         $this->call(UserSeeder::class);
 

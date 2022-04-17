@@ -16,6 +16,11 @@
         <li><strong>{{ session()->get('success') }}</strong></li>
     </div>
 @endif
+@if (session()->has('error'))
+    <div class="alert alert-success">
+        <li><strong>{{ session()->get('success') }}</strong></li>
+    </div>
+@endif
 
 <header>
     <div class="container">
@@ -50,7 +55,7 @@
                         {{-- {{ dd($session->id) }} --}}
                         <form action="/reservation/sessionRemove" method="POST">
                             @csrf
-                            <li class="list-group-item list-group-item-primary">€{{ $session->hourlyPrice }}
+                            <li class="list-group-item list-group-item-primary">€{{ $session->daily_price }}
                                 {{ $session->brand }} ~ {{ $session->model }}
                                 <input type="hidden" name="id" value="{{ $session->car_id }}">
                                 <button type="submit" class="btn btn-danger">Remove</button>

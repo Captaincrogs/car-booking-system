@@ -21,9 +21,9 @@
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="../admin">Rent a Car</a>
+            <a class="navbar-brand ps-3" href=" {{ route('admin') }}">Rent a Car</a>
             <!-- Sidebar Toggle-->
-            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
+            <button class=" btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i
                     class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
             <form class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
@@ -34,6 +34,7 @@
                             class="fas fa-search"></i></button>
                 </div>
             </form>
+
             <!-- Navbar-->
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
                 <li class="nav-item dropdown">
@@ -56,9 +57,9 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="admin">
+                            <a class="nav-link" href="{{ route('admin') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Edit stock
+                                Admin Dashboard
                             </a>
                             <div class="sb-sidenav-menu-heading">Interface</div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -74,18 +75,14 @@
                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo"
                                 data-bs-parent="#sidenavAccordion">
                                 <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                        data-bs-target="#pagesCollapseAuth" aria-expanded="false"
-                                        aria-controls="pagesCollapseAuth">
-                                        Add
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
+
                                     <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne"
                                         data-bs-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
                                             <a class="nav-link" current href="add_new_cars">Add new cars</a>
                                         </nav>
                                     </div>
+
 
 
                                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
@@ -137,6 +134,13 @@
                         </div>
                         <div class="card-body">
                             <table id="datatablesSimple">
+
+                                <a class="btn btn-primary" href="#myModal" data-bs-toggle="modal">
+                                    <i class="fas fa-plus-circle"></i>
+                                    Add New Car
+                                </a>
+                                <br>
+                                <br>
                                 <thead>
                                     <tr>
                                         <th>brand</th>
@@ -269,6 +273,104 @@
             </div>
         </div>
         {{-- end modal --}}
+        <!-- Modal HTML -->
+        <div id="myModal" class="modal fade">
+            <div class="modal-dialog modal-dialog-scrollable">
+                <div class=" modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add new cars to collection</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/admin/newcars/add" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="brand" name="brand" class="col-form-label" for="brand">Brand:</label>
+                                <input type="text" class="form-control" id="brnd" name="brand">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="model" name="model" class="col-form-label" required>Model:</label>
+                                <input type="text" class="form-control" id="model" name="model">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="category" class="col-form-label" required>Select
+                                    category:</label>
+                                <select class="form-control" name="category">
+                                    @foreach ($car_categories as $category)
+                                        <option>{{ $category }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="licence_plate" name="licence_plate" class="col-form-label" required>Licence
+                                    Plate:</label>
+                                <input type="text" class="form-control" id="lcp" name="licence_plate">
+                            </div>
+                            <div class="mb-3">
+                                <label for="amount" name="amount" class="col-form-label" required>Amount:
+                                </label>
+                                <input min="1" max="10" type="number" class="form-control" id="amount" name="amount">
+                            </div>
+                            <div class="mb-3">
+                                <label for="price" class="col-form-label" required>daily rent price €:
+                                </label>
+                                <input min="1" type=" number" class="form-control" id="daily_price"
+                                    name="daily_price">
+                            </div>
+                            <div class="mb-3">
+                                <label for="top-speed" class="col-form-label" required>top speed km/h:
+                                </label>
+                                <input min="1" type=" number" class="form-control" id="top-speed" name="topspeed">
+                            </div>
+                            <div class="mb-3">
+                                <label for="hogsre" class="col-form-label" required>horse power:
+                                </label>
+                                <input min="1" type=" number" class="form-control" id="horse-power"
+                                    name="horsepower">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="price" class="col-form-label" required>seats
+                                </label>
+                                <input min="1" type=" number" class="form-control" id="seats" name="seats">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="gps" name="gps" class="col-form-label">Car armed with gps ?</label>
+                                <select class="form-control" name="gps">
+                                    @foreach ($has_gps as $gps)
+                                        <option> {{ $gps == 1 ? 'has gps' : 'no gps' }}</td>
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="image" class="col-form-label" required>Image:</label>
+                                <input type="file" class="form-control" accept="image/png, image/gif, image/jpeg"
+                                    id="image" name="image">
+                            </div>
+                    </div>
+
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" id="submiti" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+
+
+
+
+
+
+        {{-- end modal --}}
 
         <footer class="py-4 bg-light mt-auto">
 
@@ -301,6 +403,14 @@
                 $('#car_id').val(data[5]);
             });
         });
+
+
+        $(document).ready(function() {
+            $("#myBtn").click(function() {
+                $("#myModal").modal("show");
+            });
+        });
+
 
         //ajax call to controller
         // function deleteCar(id) {

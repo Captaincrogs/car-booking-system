@@ -77,10 +77,10 @@ class ReservationController extends Controller
             ],
         ]);
 
-        // totalAmount is the hourly price of the car multiplied by the number of hours
+        // totalAmount is the hourly price of the car multiplied by the number of days
         foreach ($request->car_id as $car_id) {
             $car = Car::find($car_id);
-            $totalAmount = $car->hourlyPrice * $request->total_price;
+            $totalAmount = $car->daily_price * $request->total_price;
         }
 
         //foreach carid in session put in new invoiceItem
@@ -88,7 +88,7 @@ class ReservationController extends Controller
             $items[] = (new InvoiceItem())
                 ->title(car::find($item)->brand . ' ' . car::find($item)->model)
                 ->description(' licence plate:' . ' ' . car::find($item)->licence_plate)
-                ->pricePerUnit(car::find($item)->hourlyPrice)
+                ->pricePerUnit(car::find($item)->daily_price)
                 ->discount(0)
                 ->subTotalPrice(0)
                 ->tax(0);
@@ -131,13 +131,21 @@ class ReservationController extends Controller
             ->save('public');
 
         Session::forget('list');
-        $user = User::find(Auth::user()->id);
-        if ($user->user_orders == null) {
-            $user->user_orders = $user->user_orders . $invoice->url();
+
+
+        //save invoice_link to reservation
+        // foreach ($request->car_id as $item) {
+        //     $reservation = Reservation::where('car_id', $item)->first();
+        //     $reservation->invoice_link = $invoice->getLink();
+        //     $reservation->save();
+        // }
+        
+        if ($reservation->invoice_link == null) {
+            $reservation->invoice_link = $reservation->invoice_link . $invoice->url();
         } else {
-            $user->user_orders = $user->user_orders . '->' . $invoice->url();
+            $reservation->invoice_link = $reservation->invoice_link . '->' . $invoice->url();
         }
-        $user->save();
+        $reservation->save();
         return $invoice->stream();
         return redirect()->route('cars')->with('success', 'Reservation added successfully');
     }
@@ -159,13 +167,21 @@ class ReservationController extends Controller
     }
 
     public function get_invoice(Request $request)
-    {
-        $invoice = user::find($request->id)->user_orders;
-        $invoice = explode('->', $invoice);
-        $invoice = array_filter($invoice);
-        $test = explode('/', $invoice[0]);
-        return response()->download(public_path() . '/storage/' . $test[count($test) - 1]);
+    {   
+
+        //dump all from public folder
+        
+        // dd(Storage::allFiles('public'));
+        $reservation = Reservation::find($request->reservation_id);
+        return response()->file(public_path('invoices/' . $reservation->invoice_link));
+        
+
+        
+        
+
     }
+
+       
 
     public function edit_cars(Request $request)
     {
@@ -188,33 +204,44 @@ class ReservationController extends Controller
 
     public function add_cars(Request $request)
     {
-        //get all cars
-        $cars = Car::all();
-        // $car = new Car();
-        // $car->brand = $request->brand;
-        // $car->model = $request->model;
-        // $car->licence_plate = $request->licence_plate;
-        // $car->year = $request->year;
-        // $car->hourlyPrice = $request->hourlyPrice;
-        // $car->car_category = $request->car_category;
-        // $car->has_gps = $request->has_gps;
-        // $car->save();
-        // return redirect()->route('admin')->with('success', 'Car added successfully');
-        return view('admin_add_cars', compact('cars'));
+
+        //insert new
+        $car = new Car();
+        $car->brand = $request->brand;
+        $car->model = $request->model;
+        $car->licence_plate = $request->licence_plate;
+        $car->daily_price = $request->dailyprice;
+        $car->category = $request->category;
+        if ($request->gps == 'yes') {
+            $car->gps = 1;
+        } else {
+            $car->gps = 0;
+        }
+        $car->seats = $request->seats;
+        $car->horsepower = $request->horsepower;
+        $car->top_speed = $request->topspeed;
+        
+        $image = $request->file('image');
+        $image_name = time() . '.' . $image->getClientOriginalExtension();
+        $destinationPath = public_path('/img/cars');
+        $image->move($destinationPath, $image_name);
+        $car->image = $image_name;
+        $car->save();
+
+        return redirect()->route('admin')->with('success', 'Car added successfully');
     }
+
 
     public function update_cars(Request $request)
     {
         $car = new Car;
         $car = Car::find($request->car_id);
-        //timestamp of today 
         $car->updated_at = now();
         $car->created_at = $car->created_at;
         $car->seats = $car->seats;
         $car->brand = $car->brand;
         $car->model = $request->model;
         $car->licence_plate = $request->licence_plate;
-        //transform yes to 1 and no to 0
         if ($request->gps == 'yes') {
             $car->gps = 1;
         } else {
@@ -222,15 +249,12 @@ class ReservationController extends Controller
         }
         $car->amount = $request->amount;
         // seats does not change standard value of 5
-
         $car->daily_price = $request->daily_price;
         $car->category = $request->category;
 
         $car->save();
 
         return redirect()->route('cars')->with('success', 'Car updated successfully');
-
-
     }
 
     public function delete_cars(Request $request)
@@ -258,76 +282,14 @@ class ReservationController extends Controller
             return redirect()->route('cars')->with('error', 'Please select a car first');
         } else {
             foreach ($session_cars as $car) {
-                $total_price += $car->hourlyPrice;
+                $total_price += $car->daily_price;
             }
             return view('newReservation', compact('reservation', 'cars', 'session_cars', 'total_price'));
         }
     }
-
-
-
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreReservationRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreReservationRequest $request)
-    {
-        //store the reservation
-        // $reservation = new Reservation;
-        // $reservation->name = $request->name;
-        // $reservation->email = $request->email;
-        // $reservation->phone = $request->phone;
-        // $reservation->pickupDate = $request->pickupDate;
-        // $reservation->returnDate = $request->returnDate;
-        // $reservation->save();
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Reservation  $reservation
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Reservation $reservation)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Reservation  $reservation
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Reservation $reservation)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateReservationRequest  $request
-     * @param  \App\Models\Reservation  $reservation
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateReservationRequest $request, Reservation $reservation)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Reservation  $reservation
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Reservation $reservation)
-    {
-        //
-    }
 }
+
+
+
+
+  

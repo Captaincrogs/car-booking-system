@@ -52,7 +52,7 @@
                     <div class="sb-sidenav-menu">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Core</div>
-                            <a class="nav-link" href="index.html">
+                            <a class="nav-link" href="{{ route('admin') }}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Admin Dashboard
                             </a>
@@ -79,18 +79,7 @@
                                             <a class="nav-link" href="admin/edit/cars">edit the cars</a>
                                         </nav>
                                     </div>
-                                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                                        data-bs-target="#pagesCollapseError" aria-expanded="false"
-                                        aria-controls="pagesCollapseError">
-                                        Add
-                                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                                    </a>
-                                    <div class="collapse" id="pagesCollapseError" aria-labelledby="headingOne"
-                                        data-bs-parent="#sidenavAccordionPages">
-                                        <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="admin/add/cars">add new cars to collection</a>
-                                        </nav>
-                                    </div>
+
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Addons</div>
@@ -216,11 +205,11 @@
                                                     </form>
                                                 </td>
                                                 <td>
-                                                    <form action="reservation/admin/printInvoice" method="post">
+                                                    <form action="admin/printInvoice" method="post">
                                                         @csrf
                                                         <button class="btn btn-warning">Print Invoice <i
                                                                 class="fa-solid fa-file-invoice-dollar"></i></button>
-                                                        <input type="hidden" name="reservation_id"
+                                                        <input type="hidden" name="reservation_id" name="reservation_id"
                                                             value="{{ $reservation->id }}">
                                                     </form>
                                                 </td>

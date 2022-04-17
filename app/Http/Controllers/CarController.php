@@ -40,9 +40,20 @@ class CarController extends Controller
         
         $car_id = request()->id;
         $car_id = $request->id;
+        //only allow one car to be added to the list
+       
 
         $list = session()->get('list');
-        array_push($list, $car_id);
+        
+        if(!in_array($car_id, Session::get('list'))){
+            Session::push('list', $car_id);
+        }
+        if(count(Session::get('list')) > 1){
+            //remove newly added car from the list
+            return redirect()->back()->with('error', 'You can only select one car');
+            Session::flush();
+        }
+        // dd($list);
         session()->put('list', $list);
         Session::save();
        

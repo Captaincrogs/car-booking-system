@@ -34,13 +34,13 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::post('/cars/checkout', [App\Http\Controllers\CarController::class, 'checkout']);
     Route::get('/cars', [App\Http\Controllers\CarController::class, 'index'])->name('cars');
+    
     Route::get('/admin', [App\Http\Controllers\ReservationController::class, 'index'])->name('admin');
     Route::post('admin/printInvoice', [App\Http\Controllers\ReservationController::class, 'get_invoice'])->name('get_invoice');
-    Route::get('/admin/add/cars', [App\Http\Controllers\ReservationController::class, 'add_cars']);  
+    
     Route::get('/admin/edit/cars', [App\Http\Controllers\ReservationController::class, 'edit_cars']);  
-
-
     Route::post('/admin/newcars/update', [App\Http\Controllers\ReservationController::class, 'update_cars']); 
+    Route::post('/admin/newcars/add', [App\Http\Controllers\ReservationController::class, 'add_cars']); 
     Route::post('/admin/newcars/delete', [App\Http\Controllers\ReservationController::class, 'delete_cars']);
  
 

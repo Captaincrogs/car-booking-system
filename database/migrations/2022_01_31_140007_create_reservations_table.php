@@ -22,6 +22,8 @@ class CreateReservationsTable extends Migration
             $table->string('status');
             $table->unsignedInteger('car_id');
             $table->unsignedInteger('user_id');
+            $table->string('invoice_link')->nullable();
+
             
         });
     }
