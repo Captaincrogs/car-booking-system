@@ -205,7 +205,7 @@
                                                     </form>
                                                 </td>
                                                 <td>
-                                                    <form action="admin/printInvoice" method="post">
+                                                    <form action="/admin/printInvoice" method="post">
                                                         @csrf
                                                         <button class="btn btn-warning">Print Invoice <i
                                                                 class="fa-solid fa-file-invoice-dollar"></i></button>

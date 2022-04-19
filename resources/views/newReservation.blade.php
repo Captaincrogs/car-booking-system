@@ -34,7 +34,7 @@
                         @else
                             <p>Your cart is empty</p>
                         @endif
-                        <a href="/cars" class="btn btn-primary btn-xl page-scroll">Continue Shopping</a>
+                        <a href="/cars" class="btn btn-primary btn-xl page-scroll">Go back to gallery</a>
                     </div>
                 </div>
             </div>
@@ -50,7 +50,7 @@
         <div class="box-inner-1 pb-3 mb-3 ">
             <div class="  mb-3 ">
                 <ul class="list-group">
-                    <h3>Chosen Cars</h3>
+                    <h4>Chosen Car - <strong>one car per transaction</strong></h4>
                     @foreach ($session_cars as $session)
                         {{-- {{ dd($session->id) }} --}}
                         <form action="/reservation/sessionRemove" method="POST">

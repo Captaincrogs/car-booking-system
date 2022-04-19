@@ -42,7 +42,6 @@
                     <div class="p-carousel">
                         <div class="carousel slide" data-ride="carousel" id="carousel-1">
                             <div class="carousel-inner" role="listbox">
-                                //display image link from database
                                 <div class="carousel-item active"><img class="d-block w-100"
                                         src="img/cars/{{ $car->image }}" alt="Slide Image"></div>
                                 {{-- <div class="carousel-item active"><img class="w-100 d-block" src="https://preview.free3d.com/img/2003/08/1688639047162922962/thfeznx6-900.jpg" alt="Slide Image"></div>

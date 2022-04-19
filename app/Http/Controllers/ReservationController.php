@@ -131,20 +131,18 @@ class ReservationController extends Controller
             ->save('public');
 
         Session::forget('list');
-
-
-        //save invoice_link to reservation
-        // foreach ($request->car_id as $item) {
-        //     $reservation = Reservation::where('car_id', $item)->first();
-        //     $reservation->invoice_link = $invoice->getLink();
-        //     $reservation->save();
-        // }
         
         if ($reservation->invoice_link == null) {
             $reservation->invoice_link = $reservation->invoice_link . $invoice->url();
         } else {
             $reservation->invoice_link = $reservation->invoice_link . '->' . $invoice->url();
         }
+
+        if ($reservation->reservation_end_date < $reservation->reservation_start_date) {
+            $reservation->status = 'canceled';
+        }
+
+        //if session
         $reservation->save();
         return $invoice->stream();
         return redirect()->route('cars')->with('success', 'Reservation added successfully');
@@ -153,7 +151,6 @@ class ReservationController extends Controller
     public function sessionRemove(Request $request)
     {
 
-        //list heeft nog geen waarde maar is alle id's hierdoor werkt het niet op specifieke auto te verwijderen
         Session::forget('list', [$request->car_id]);
         Session::save();
         return redirect()->route('cars');
@@ -169,17 +166,9 @@ class ReservationController extends Controller
     public function get_invoice(Request $request)
     {   
 
-        //dump all from public folder
-        
-        // dd(Storage::allFiles('public'));
         $reservation = Reservation::find($request->reservation_id);
-        return response()->file(public_path('invoices/' . $reservation->invoice_link));
-        
-
-        
-        
-
-    }
+        return response()->download(public_path().'/storage/'. $reservation->invoice_link);
+    }   
 
        
 
@@ -263,6 +252,7 @@ class ReservationController extends Controller
         $car->delete();
         return redirect()->route('cars')->with('success', 'Car deleted successfully');
     }
+    
 
 
     /**
@@ -283,6 +273,14 @@ class ReservationController extends Controller
         } else {
             foreach ($session_cars as $car) {
                 $total_price += $car->daily_price;
+            }
+               
+            //if cart has more then one car remove the last car
+            if (count($session_cars) > 1) {
+                Session::pull('list', [$session_cars[count($session_cars) - 1]->id]);
+                return back()->with('error', 'Please select only one car');
+               
+
             }
             return view('newReservation', compact('reservation', 'cars', 'session_cars', 'total_price'));
         }
