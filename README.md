@@ -13,3 +13,6 @@ composer install && composer update
 npm install
 make an account to access platform
 ```
+
+500 server error? use (php artisan key:generate) :partying_face:
+
