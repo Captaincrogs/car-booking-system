@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 
 use App\Http\Requests\StoreReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
@@ -165,12 +167,13 @@ class ReservationController extends Controller
 
     public function get_invoice(Request $request)
     {   
-
         $reservation = Reservation::find($request->reservation_id);
-        return response()->download(public_path().'/storage/'. $reservation->invoice_link);
-    }   
+        //if it is the same download else trow error
+        //remove http://rentacar.test/storage from invoice link
+        $invoice_link = str_replace('http://rentacar.test/storage/', '', $reservation->invoice_link);
+        return response()->download(public_path() . '/public/'. $invoice_link);
 
-       
+    }   
 
     public function edit_cars(Request $request)
     {

@@ -20,6 +20,8 @@
             <li class="nav-item"> <a class="nav-link" href="/cars" data-abc="true">Car Gallery</a> </li>
             <li class="nav-item"><a class="nav-link" href="/admin">Admin</a></li>
             <li class="nav-item"> <a class="nav-link" href="/newReservation" data-abc="true">Cart</a></li>
+            <li class="nav-item"> <a class="nav-link" href="<?php echo e(url('/logout')); ?>">Logout</a></li>
+
         </ul>
     </div>
 </nav>

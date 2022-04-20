@@ -21,8 +21,8 @@ Route::get('/', function () {
 
 
 Auth::routes();
+Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
-//all routes need authentication to 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/newReservation', 'ReservationController@newReservation')->name('newReservation');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
